@@ -1,26 +1,128 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-primary-900: #0f0a1e;
+  --color-primary-800: #1a1033;
+  --color-primary-700: #251947;
+  --color-primary-600: #31225c;
+  --color-primary-500: #3d2b71;
+  --color-primary-400: #5a3f9e;
+  --color-primary-300: #7c5cbf;
+  --color-primary-200: #a78bda;
+  --color-primary-100: #d2bff0;
+
+  --color-accent-500: #06d6a0;
+  --color-accent-400: #34e8b8;
+  --color-accent-300: #6aefd0;
+  --color-accent-200: #a0f5e3;
+  --color-accent-100: #d0faf1;
+
+  --color-gold-500: #f59e0b;
+  --color-gold-400: #fbbf24;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-primary-900);
+  color: #ffffff;
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(6, 214, 160, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(6, 214, 160, 0.6);
+  }
+}
+
+@keyframes toast-slide {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  10% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.8s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-toast {
+  animation: toast-slide 5s ease-in-out forwards;
+}
+
+.font-serif-display {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
 }
