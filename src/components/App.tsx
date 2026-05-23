@@ -647,7 +647,7 @@ function DispatchView({
               <button type="button" onClick={onShowTerms} className="font-medium text-accent-500 underline">Terms & Conditions</button>.
               Registration charges are applicable.
             </p>
-            <button type="submit" className="w-full rounded-xl bg-primary-800 py-3 font-semibold text-white transition-colors hover:bg-primary-700">
+            <button type="submit" className="w-full rounded-xl bg-accent-500 py-3 font-semibold text-primary-900 transition-colors hover:bg-accent-400">
               Save & Continue to Payment →
             </button>
           </form>
