@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import type { SiteConfig, PlanConfig } from "@/lib/config";
+import { DEFAULT_CONFIG } from "@/lib/config";
 
 type View = "home" | "projects" | "dispatch" | "payment" | "howItWorks" | "support";
 
@@ -12,27 +14,8 @@ interface ToastData {
   message: string;
 }
 
-const TOAST_MESSAGES: Omit<ToastData, "id">[] = [
-  { icon: "✏️", name: "Meena T.", message: "started writing today" },
-  { icon: "🟢", name: "Suresh B.", message: "received ₹11,000 advance" },
-  { icon: "✏️", name: "Kavita R.", message: "completed Project 02" },
-  { icon: "🟢", name: "Harish P.", message: "got paid ₹30,000" },
-  { icon: "✏️", name: "Pooja M.", message: "started writing today" },
-  { icon: "🟢", name: "Rajesh K.", message: "withdrew ₹22,500" },
-  { icon: "✏️", name: "Sunita D.", message: "completed Project 01" },
-  { icon: "🟢", name: "Manoj S.", message: "received ₹15,000 advance" },
-];
-
-const TESTIMONIALS = [
-  { name: "Suresh Yadav", city: "Lucknow", initial: "S", stars: 5, text: "Kit mila 2 din mein. Paper quality bahut acchi hai aur ₹11,000 advance bhi turant mil gaya. Bahut impressed hoon." },
-  { name: "Kavita Mehta", city: "Jaipur", initial: "K", stars: 5, text: "Pehle thoda doubt tha, but process transparent hai aur instructions bilkul clear hain. Income ka badiya zariya hai." },
-  { name: "Manoj Kumar", city: "Patna", initial: "M", stars: 5, text: "Premium stationery kit ka packaging bahut sundar hai. Ye kaam se zyada ek creative project lagta hai." },
-  { name: "Geeta Devi", city: "Indore", initial: "G", stars: 5, text: "Ghar baithe sabse accha kaam ka option. Payment time pe aaya aur support team hamesha responsive hai." },
-  { name: "Harish Reddy", city: "Hyderabad", initial: "H", stars: 5, text: "Project 02 complete kiya. Final balance 24 ghante mein credit ho gaya. Highly professional company hai." },
-  { name: "Pooja Verma", city: "Bhopal", initial: "P", stars: 5, text: "Simple process hai aur rewards bhi bahut acche hain. Agar handwriting acchi hai to ye best opportunity hai." },
-];
-
 export default function App() {
+  const [cfg, setCfg] = useState<SiteConfig>(DEFAULT_CONFIG);
   const [currentView, setCurrentView] = useState<View>("home");
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
   const [showStepModal, setShowStepModal] = useState<1 | 2 | null>(null);
@@ -46,21 +29,24 @@ export default function App() {
     name: "", mobile: "", address: "", city: "", state: "", pincode: "", utr: "",
   });
 
-  const plans = [
-    { tier: "Starter", name: "Project A", reward: "18,000", fee: "450", advance: "9,000", pages: 40 },
-    { tier: "Professional", name: "Project B", reward: "35,000", fee: "900", advance: "17,500", pages: 90, popular: true },
-    { tier: "Premium", name: "Project C", reward: "50,000", fee: "1,500", advance: "25,000", pages: 130 },
-  ];
+  useEffect(() => {
+    fetch("/api/config")
+      .then((r) => (r.ok ? r.json() : DEFAULT_CONFIG))
+      .then((d) => setCfg(d))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     let idx = 0;
     const interval = setInterval(() => {
-      const msg = TOAST_MESSAGES[idx % TOAST_MESSAGES.length];
+      const msgs = cfg.toastMessages;
+      if (msgs.length === 0) return;
+      const msg = msgs[idx % msgs.length];
       setToast({ ...msg, id: Date.now() });
       idx++;
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [cfg.toastMessages]);
 
   const navigate = useCallback((view: View) => {
     setCurrentView(view);
@@ -94,24 +80,24 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-40 border-b border-white/10 bg-primary-900/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-primary-900">V</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-primary-900">{cfg.logoInitial}</div>
             <div>
-              <div className="text-sm font-bold text-white">Vishv Publishers</div>
-              <div className="text-[10px] tracking-widest text-accent-400">Est. 2026</div>
+              <div className="text-sm font-bold text-white">{cfg.companyShortName}</div>
+              <div className="text-[10px] tracking-widest text-accent-400">Est. {cfg.estYear}</div>
             </div>
           </button>
           <div className="hidden items-center gap-6 md:flex">
             <button onClick={() => navigate("home")} className="text-sm text-gray-300 hover:text-white transition-colors">Home</button>
             <button onClick={() => navigate("projects")} className="text-sm text-gray-300 hover:text-white transition-colors">Project Plans</button>
             <button onClick={() => setShowHowItWorks(true)} className="text-sm text-accent-400 font-medium">
-              📋 How It Works
+              How It Works
             </button>
             <button onClick={() => navigate("support")} className="text-sm text-gray-300 hover:text-white transition-colors">Support</button>
           </div>
           <div className="hidden items-center gap-3 md:flex">
-            <button className="text-sm text-gray-300">🌐 EN</button>
+            <button className="text-sm text-gray-300">EN</button>
             <button onClick={() => navigate("projects")} className="rounded-full border border-accent-500 px-4 py-1.5 text-sm font-medium text-accent-400 transition-colors hover:bg-accent-500 hover:text-primary-900">
-              View Projects →
+              View Projects
             </button>
           </div>
           <button onClick={() => setMobileMenu(!mobileMenu)} className="md:hidden text-white">
@@ -133,8 +119,8 @@ export default function App() {
       </nav>
 
       <main className="pt-16">
-        {currentView === "home" && <HomeView navigate={navigate} />}
-        {currentView === "projects" && <ProjectsView plans={plans} selectPlan={selectPlan} />}
+        {currentView === "home" && <HomeView navigate={navigate} cfg={cfg} />}
+        {currentView === "projects" && <ProjectsView plans={cfg.plans} selectPlan={selectPlan} />}
         {currentView === "dispatch" && (
           <DispatchView
             formData={formData}
@@ -148,22 +134,23 @@ export default function App() {
         )}
         {currentView === "payment" && (
           <PaymentView
-            plan={selectedPlan !== null ? plans[selectedPlan] : null}
+            plan={selectedPlan !== null ? cfg.plans[selectedPlan] : null}
             formData={formData}
             onChange={handleFormChange}
             onShowStep={() => setShowStepModal(2)}
             onShowUtr={() => setShowUtrModal(true)}
+            cfg={cfg}
           />
         )}
-        {currentView === "support" && <SupportView />}
+        {currentView === "support" && <SupportView cfg={cfg} />}
       </main>
 
       {/* Footer */}
       <footer className="border-t border-white/10 bg-primary-800 py-10">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <div className="mb-4 flex items-center justify-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-primary-900">V</div>
-            <span className="font-semibold text-white">Vishv Book Publishers</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-primary-900">{cfg.logoInitial}</div>
+            <span className="font-semibold text-white">{cfg.companyName}</span>
           </div>
           <div className="mb-4 flex flex-wrap items-center justify-center gap-6 text-xs tracking-widest text-gray-400">
             <button className="hover:text-white transition-colors">PRIVACY</button>
@@ -171,16 +158,27 @@ export default function App() {
             <button className="hover:text-white transition-colors">AGREEMENT</button>
             <button onClick={() => navigate("support")} className="hover:text-white transition-colors">HELP</button>
           </div>
-          <p className="text-xs text-gray-500">© 2026 Vishv Book Publishers. All rights reserved.</p>
+          <p className="text-xs text-gray-500">&copy; {cfg.estYear} {cfg.companyName}. All rights reserved.</p>
         </div>
       </footer>
 
       {/* Telegram Button */}
-      <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0088cc] text-white shadow-lg transition-transform hover:scale-110">
-        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.97-1.73 6.62-2.87 7.97-3.43 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
-        </svg>
-      </a>
+      {cfg.telegramLink && (
+        <a href={cfg.telegramLink} target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0088cc] text-white shadow-lg transition-transform hover:scale-110">
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.97-1.73 6.62-2.87 7.97-3.43 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+          </svg>
+        </a>
+      )}
+
+      {/* WhatsApp Button */}
+      {cfg.whatsappNumber && (
+        <a href={`https://wa.me/${cfg.whatsappNumber.replace(/[^0-9]/g, "")}`} target="_blank" rel="noopener noreferrer" className="fixed bottom-20 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25d366] text-white shadow-lg transition-transform hover:scale-110">
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+        </a>
+      )}
 
       {/* Step 1 Modal */}
       {showStepModal === 1 && (
@@ -201,7 +199,7 @@ export default function App() {
               onClick={() => { setShowStepModal(null); navigate("dispatch"); }}
               className="mt-5 w-full rounded-xl bg-accent-500 py-3 font-semibold text-primary-900 transition-colors hover:bg-accent-400"
             >
-              I Understand →
+              I Understand
             </button>
           </div>
         </Modal>
@@ -225,7 +223,7 @@ export default function App() {
               onClick={() => { setShowStepModal(null); navigate("payment"); }}
               className="mt-5 w-full rounded-xl bg-accent-500 py-3 font-semibold text-primary-900 transition-colors hover:bg-accent-400"
             >
-              Got It →
+              Got It
             </button>
           </div>
         </Modal>
@@ -282,10 +280,10 @@ export default function App() {
           </div>
           <div className="mt-5 space-y-4">
             {[
-              { step: "1", title: "Select a Project Plan", desc: "Choose a tier based on your income goals — Explorer, Growth, or Elite." },
+              { step: "1", title: "Select a Project Plan", desc: "Choose a tier based on your income goals — Starter, Professional, or Premium." },
               { step: "2", title: "Provide Dispatch Details", desc: "Enter your name, mobile number, and delivery address accurately." },
               { step: "3", title: "Pay Refundable Fee", desc: "Scan the QR and pay the registration fee — 100% refundable on submission." },
-              { step: "4", title: "Submit UTR → Get Advance", desc: "Enter your 12-digit UTR. Your 50% advance is credited instantly on verification!" },
+              { step: "4", title: "Submit UTR & Get Advance", desc: "Enter your 12-digit UTR. Your 50% advance is credited instantly on verification!" },
             ].map((item) => (
               <div key={item.step} className="flex gap-4">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-500 text-sm font-bold text-primary-900">
@@ -324,12 +322,13 @@ function Modal({ children, onClose }: { children: React.ReactNode; onClose: () =
 
 /* ═══════════════════════════ HOME VIEW ═══════════════════════════ */
 
-function HomeView({ navigate }: { navigate: (v: View) => void }) {
+function HomeView({ navigate, cfg }: { navigate: (v: View) => void; cfg: SiteConfig }) {
   return (
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary-900 px-4 py-20 sm:px-6 lg:py-28">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 lg:flex-row">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(230,168,23,0.12),transparent)]"></div>
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-12 lg:flex-row">
           <div className="flex-1 animate-slide-left">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-accent-500/10 px-4 py-1.5">
               <span className="h-2 w-2 rounded-full bg-accent-500 animate-pulse"></span>
@@ -342,18 +341,18 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
               Into Wealth.
             </h1>
             <p className="mt-6 max-w-lg text-gray-400">
-              The most trusted handwriting ecosystem in India. Guaranteed payouts, 50% advance on dispatch, and premium kits at your door.
+              {cfg.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <button onClick={() => navigate("projects")} className="rounded-full bg-accent-500 px-6 py-3 font-semibold text-primary-900 transition-all hover:bg-accent-400 hover:shadow-lg">
+              <button onClick={() => navigate("projects")} className="rounded-full bg-accent-500 px-6 py-3 font-semibold text-primary-900 transition-all hover:bg-accent-400 hover:shadow-lg hover:shadow-accent-500/20">
                 View Projects
               </button>
               <button onClick={() => navigate("support")} className="flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 font-medium text-white transition-colors hover:border-white/40">
-                💬 Get Support
+                Get Support
               </button>
             </div>
             <button onClick={() => navigate("projects")} className="mt-4 flex items-center gap-1 text-sm font-medium text-accent-400 hover:underline">
-              ℹ️ Read the Step-by-Step Guide
+              Read the Step-by-Step Guide
             </button>
             <div className="mt-6 flex flex-wrap gap-4 text-xs text-gray-400">
               <span>🔒 100% Secure</span>
@@ -407,7 +406,7 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-12 lg:flex-row">
             <div className="flex-1">
-              <p className="text-xs font-semibold tracking-widest text-accent-500">WHY THOUSANDS CHOOSE VISHV</p>
+              <p className="text-xs font-semibold tracking-widest text-accent-500">WHY THOUSANDS CHOOSE {cfg.companyShortName.toUpperCase()}</p>
               <h2 className="mt-3 text-3xl font-extrabold text-gray-900 sm:text-4xl">
                 Professionalism<br />
                 <span className="font-serif-display text-accent-500">in Every Page.</span>
@@ -466,7 +465,7 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
           <h3 className="font-serif-display mt-3 text-3xl font-bold text-gray-900 sm:text-4xl">Voices of Our Community</h3>
           <div className="mx-auto mt-2 h-1 w-12 rounded-full bg-accent-500"></div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
+            {cfg.testimonials.map((t) => (
               <div key={t.name} className="rounded-2xl bg-white p-6 text-left shadow-sm transition-shadow hover:shadow-md">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-800 text-sm font-bold text-white">
@@ -490,7 +489,7 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
             ))}
           </div>
           <button onClick={() => navigate("projects")} className="mt-10 rounded-full bg-primary-800 px-8 py-3 font-semibold text-white transition-colors hover:bg-primary-700">
-            Join 150k+ Successful Writers →
+            Join 150k+ Successful Writers
           </button>
         </div>
       </section>
@@ -500,7 +499,7 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
 
 /* ═══════════════════════════ PROJECTS VIEW ═══════════════════════════ */
 
-function ProjectsView({ plans, selectPlan }: { plans: { tier: string; name: string; reward: string; fee: string; advance: string; pages: number; popular?: boolean }[]; selectPlan: (i: number) => void }) {
+function ProjectsView({ plans, selectPlan }: { plans: PlanConfig[]; selectPlan: (i: number) => void }) {
   return (
     <section className="min-h-screen bg-primary-900 px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-5xl text-center">
@@ -555,7 +554,7 @@ function ProjectsView({ plans, selectPlan }: { plans: { tier: string; name: stri
                   : "border border-white/20 text-white hover:bg-white/10"
               }`}
             >
-              {index === 0 ? "Select Plan" : index === 1 ? "Pick This Plan →" : "Go Premium →"}
+              {index === 0 ? "Select Plan" : index === 1 ? "Pick This Plan" : "Go Premium"}
             </button>
           </div>
         ))}
@@ -589,7 +588,7 @@ function DispatchView({
             <h2 className="mt-2 text-2xl font-bold text-gray-900">Dispatch Details</h2>
             <p className="mt-1 text-sm text-gray-500">Where should we deliver your premium handwriting kit?</p>
             <button onClick={onShowStep} className="mt-2 text-sm font-medium text-accent-500 hover:underline">
-              ℹ️ View Step 1 Instructions
+              View Step 1 Instructions
             </button>
           </div>
           <form
@@ -648,7 +647,7 @@ function DispatchView({
               Registration charges are applicable.
             </p>
             <button type="submit" className="w-full rounded-xl bg-accent-500 py-3 font-semibold text-primary-900 transition-colors hover:bg-accent-400">
-              Save & Continue to Payment →
+              Save & Continue to Payment
             </button>
           </form>
         </div>
@@ -665,12 +664,14 @@ function PaymentView({
   onChange,
   onShowStep,
   onShowUtr,
+  cfg,
 }: {
-  plan: { tier: string; name: string; reward: string; fee: string; advance: string } | null;
+  plan: PlanConfig | null;
   formData: { utr: string };
   onChange: (field: string, value: string) => void;
   onShowStep: () => void;
   onShowUtr: () => void;
+  cfg: SiteConfig;
 }) {
   return (
     <section className="flex min-h-screen items-start justify-center bg-gray-50 px-4 py-20 sm:px-6">
@@ -687,7 +688,7 @@ function PaymentView({
             </div>
           </div>
           <button onClick={onShowStep} className="mt-3 text-sm font-medium text-accent-500 hover:underline">
-            ℹ️ View Step 2 Instructions
+            View Step 2 Instructions
           </button>
 
           {/* Earning Summary */}
@@ -715,14 +716,29 @@ function PaymentView({
           {/* QR Section */}
           <div className="mt-6 rounded-xl border border-gray-200 p-4 text-center">
             <p className="text-xs font-semibold tracking-widest text-gray-400">SCAN & PAY</p>
-            <div className="mx-auto mt-3 flex h-48 w-48 items-center justify-center rounded-xl bg-gray-100">
-              <div className="grid grid-cols-5 gap-1">
-                {Array.from({ length: 25 }).map((_, i) => (
-                  <div key={i} className={`h-6 w-6 rounded-sm ${[0,1,2,4,5,6,10,12,14,18,20,21,22,24].includes(i) ? "bg-gray-800" : "bg-white"}`} />
-                ))}
+            {cfg.qrImageUrl ? (
+              <div className="mx-auto mt-3 flex h-48 w-48 items-center justify-center overflow-hidden rounded-xl bg-white">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={cfg.qrImageUrl} alt="QR Code" className="h-full w-full object-contain" />
               </div>
-            </div>
-            <button className="mt-3 text-sm font-medium text-accent-500 hover:underline">
+            ) : (
+              <div className="mx-auto mt-3 flex h-48 w-48 items-center justify-center rounded-xl bg-gray-100">
+                <div className="grid grid-cols-5 gap-1">
+                  {Array.from({ length: 25 }).map((_, i) => (
+                    <div key={i} className={`h-6 w-6 rounded-sm ${[0,1,2,4,5,6,10,12,14,18,20,21,22,24].includes(i) ? "bg-gray-800" : "bg-white"}`} />
+                  ))}
+                </div>
+              </div>
+            )}
+            {cfg.upiId && (
+              <p className="mt-2 text-sm font-medium text-gray-700">UPI: {cfg.upiId}</p>
+            )}
+            <button
+              onClick={() => {
+                if (cfg.upiId) navigator.clipboard.writeText(cfg.upiId);
+              }}
+              className="mt-2 text-sm font-medium text-accent-500 hover:underline"
+            >
               Tap to Copy UPI ID
             </button>
           </div>
@@ -745,7 +761,7 @@ function PaymentView({
 
           {/* Submit */}
           <a
-            href="https://t.me/vishvbooks"
+            href={cfg.telegramLink}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0088cc] py-3 font-semibold text-white transition-colors hover:bg-[#006699]"
@@ -763,7 +779,7 @@ function PaymentView({
 
 /* ═══════════════════════════ SUPPORT VIEW ═══════════════════════════ */
 
-function SupportView() {
+function SupportView({ cfg }: { cfg: SiteConfig }) {
   return (
     <section className="min-h-screen bg-gray-50 px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-5xl">
@@ -778,7 +794,7 @@ function SupportView() {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10 text-2xl">💬</div>
             <h3 className="mt-4 text-lg font-semibold text-gray-900">Live Chat Support</h3>
             <p className="mt-2 text-sm text-gray-500">Instant response for all registration and technical queries.</p>
-            <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-primary-900 transition-colors hover:bg-accent-400">
+            <a href={cfg.telegramLink} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-primary-900 transition-colors hover:bg-accent-400">
               Chat Now
             </a>
           </div>
@@ -791,7 +807,7 @@ function SupportView() {
             </div>
             <h3 className="mt-4 text-lg font-semibold text-gray-900">Official Channel</h3>
             <p className="mt-2 text-sm text-gray-500">Join our community of 5,000+ writers for updates and announcements.</p>
-            <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#006699]">
+            <a href={cfg.telegramLink} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#006699]">
               Join Channel
             </a>
           </div>
