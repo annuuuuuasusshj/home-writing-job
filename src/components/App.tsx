@@ -13,23 +13,23 @@ interface ToastData {
 }
 
 const TOAST_MESSAGES: Omit<ToastData, "id">[] = [
-  { icon: "✏️", name: "Priya D.", message: "started writing today" },
-  { icon: "🟢", name: "Amit J.", message: "received ₹11,000 advance" },
-  { icon: "✏️", name: "Deepak R.", message: "completed Project 02" },
-  { icon: "🟢", name: "Neha L.", message: "got paid ₹30,000" },
-  { icon: "✏️", name: "Rahul S.", message: "started writing today" },
-  { icon: "🟢", name: "Sneha V.", message: "withdrew ₹22,500" },
-  { icon: "✏️", name: "Vikram K.", message: "completed Project 01" },
-  { icon: "🟢", name: "Anjali M.", message: "received ₹15,000 advance" },
+  { icon: "✏️", name: "Meena T.", message: "started writing today" },
+  { icon: "🟢", name: "Suresh B.", message: "received ₹11,000 advance" },
+  { icon: "✏️", name: "Kavita R.", message: "completed Project 02" },
+  { icon: "🟢", name: "Harish P.", message: "got paid ₹30,000" },
+  { icon: "✏️", name: "Pooja M.", message: "started writing today" },
+  { icon: "🟢", name: "Rajesh K.", message: "withdrew ₹22,500" },
+  { icon: "✏️", name: "Sunita D.", message: "completed Project 01" },
+  { icon: "🟢", name: "Manoj S.", message: "received ₹15,000 advance" },
 ];
 
 const TESTIMONIALS = [
-  { name: "Rahul Sharma", city: "Mumbai", initial: "R", stars: 5, text: "Received my kit in 2 days. The paper quality is excellent and I already received my ₹11,000 advance. Genuinely impressive." },
-  { name: "Anjali Gupta", city: "Delhi", initial: "A", stars: 4, text: "I was hesitant at first, but the process is transparent and the instructions are very clear. A great income source." },
-  { name: "Sneha V.", city: "Bangalore", initial: "S", stars: 5, text: "The premium stationery kit they send is beautifully packaged. It feels more like a creative project than work." },
-  { name: "Priya Nair", city: "Kochi", initial: "P", stars: 5, text: "Best work-from-home option in Kerala. Payment arrived on time and the support team is always responsive." },
-  { name: "Vikram Singh", city: "Chandigarh", initial: "V", stars: 5, text: "Just finished Project 02. The final balance was credited within 24 hours of submission. Highly professional." },
-  { name: "Amit Patel", city: "Ahmedabad", initial: "A", stars: 5, text: "Straightforward process with excellent rewards. If you have good handwriting, this is the opportunity you've been waiting for." },
+  { name: "Suresh Yadav", city: "Lucknow", initial: "S", stars: 5, text: "Kit mila 2 din mein. Paper quality bahut acchi hai aur ₹11,000 advance bhi turant mil gaya. Bahut impressed hoon." },
+  { name: "Kavita Mehta", city: "Jaipur", initial: "K", stars: 5, text: "Pehle thoda doubt tha, but process transparent hai aur instructions bilkul clear hain. Income ka badiya zariya hai." },
+  { name: "Manoj Kumar", city: "Patna", initial: "M", stars: 5, text: "Premium stationery kit ka packaging bahut sundar hai. Ye kaam se zyada ek creative project lagta hai." },
+  { name: "Geeta Devi", city: "Indore", initial: "G", stars: 5, text: "Ghar baithe sabse accha kaam ka option. Payment time pe aaya aur support team hamesha responsive hai." },
+  { name: "Harish Reddy", city: "Hyderabad", initial: "H", stars: 5, text: "Project 02 complete kiya. Final balance 24 ghante mein credit ho gaya. Highly professional company hai." },
+  { name: "Pooja Verma", city: "Bhopal", initial: "P", stars: 5, text: "Simple process hai aur rewards bhi bahut acche hain. Agar handwriting acchi hai to ye best opportunity hai." },
 ];
 
 export default function App() {
@@ -47,9 +47,9 @@ export default function App() {
   });
 
   const plans = [
-    { tier: "Explorer", name: "Project 01", reward: "22,000", fee: "550", advance: "11,000", pages: 50 },
-    { tier: "Growth", name: "Project 02", reward: "30,000", fee: "850", advance: "15,000", pages: 80, popular: true },
-    { tier: "Elite", name: "Project 03", reward: "45,000", fee: "1,250", advance: "22,500", pages: 120 },
+    { tier: "Starter", name: "Project A", reward: "18,000", fee: "450", advance: "9,000", pages: 40 },
+    { tier: "Professional", name: "Project B", reward: "35,000", fee: "900", advance: "17,500", pages: 90, popular: true },
+    { tier: "Premium", name: "Project C", reward: "50,000", fee: "1,500", advance: "25,000", pages: 130 },
   ];
 
   useEffect(() => {
@@ -94,9 +94,9 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-40 border-b border-white/10 bg-primary-900/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <button onClick={() => navigate("home")} className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-primary-900">H</div>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-primary-900">V</div>
             <div>
-              <div className="text-sm font-bold text-white">HomeWrite Publishers</div>
+              <div className="text-sm font-bold text-white">Vishv Publishers</div>
               <div className="text-[10px] tracking-widest text-accent-400">Est. 2026</div>
             </div>
           </button>
@@ -162,8 +162,8 @@ export default function App() {
       <footer className="border-t border-white/10 bg-primary-800 py-10">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <div className="mb-4 flex items-center justify-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-primary-900">H</div>
-            <span className="font-semibold text-white">HomeWrite Publishers</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-xs font-bold text-primary-900">V</div>
+            <span className="font-semibold text-white">Vishv Book Publishers</span>
           </div>
           <div className="mb-4 flex flex-wrap items-center justify-center gap-6 text-xs tracking-widest text-gray-400">
             <button className="hover:text-white transition-colors">PRIVACY</button>
@@ -171,12 +171,12 @@ export default function App() {
             <button className="hover:text-white transition-colors">AGREEMENT</button>
             <button onClick={() => navigate("support")} className="hover:text-white transition-colors">HELP</button>
           </div>
-          <p className="text-xs text-gray-500">© 2026 HomeWrite Publishers. All rights reserved.</p>
+          <p className="text-xs text-gray-500">© 2026 Vishv Book Publishers. All rights reserved.</p>
         </div>
       </footer>
 
       {/* Telegram Button */}
-      <a href="https://t.me/homewritejobs" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0088cc] text-white shadow-lg transition-transform hover:scale-110">
+      <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0088cc] text-white shadow-lg transition-transform hover:scale-110">
         <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.97-1.73 6.62-2.87 7.97-3.43 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
         </svg>
@@ -407,7 +407,7 @@ function HomeView({ navigate }: { navigate: (v: View) => void }) {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col gap-12 lg:flex-row">
             <div className="flex-1">
-              <p className="text-xs font-semibold tracking-widest text-accent-500">WHY THOUSANDS CHOOSE HOMEWRITE</p>
+              <p className="text-xs font-semibold tracking-widest text-accent-500">WHY THOUSANDS CHOOSE VISHV</p>
               <h2 className="mt-3 text-3xl font-extrabold text-gray-900 sm:text-4xl">
                 Professionalism<br />
                 <span className="font-serif-display text-accent-500">in Every Page.</span>
@@ -745,7 +745,7 @@ function PaymentView({
 
           {/* Submit */}
           <a
-            href="https://t.me/homewritejobs"
+            href="https://t.me/vishvbooks"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0088cc] py-3 font-semibold text-white transition-colors hover:bg-[#006699]"
@@ -778,7 +778,7 @@ function SupportView() {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10 text-2xl">💬</div>
             <h3 className="mt-4 text-lg font-semibold text-gray-900">Live Chat Support</h3>
             <p className="mt-2 text-sm text-gray-500">Instant response for all registration and technical queries.</p>
-            <a href="https://t.me/homewritejobs" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-primary-900 transition-colors hover:bg-accent-400">
+            <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-primary-900 transition-colors hover:bg-accent-400">
               Chat Now
             </a>
           </div>
@@ -791,7 +791,7 @@ function SupportView() {
             </div>
             <h3 className="mt-4 text-lg font-semibold text-gray-900">Official Channel</h3>
             <p className="mt-2 text-sm text-gray-500">Join our community of 5,000+ writers for updates and announcements.</p>
-            <a href="https://t.me/homewritejobs" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#006699]">
+            <a href="https://t.me/vishvbooks" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block rounded-lg bg-[#0088cc] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#006699]">
               Join Channel
             </a>
           </div>
@@ -802,7 +802,7 @@ function SupportView() {
             <form className="mt-4 space-y-3" onSubmit={(e) => e.preventDefault()}>
               <input type="text" placeholder="Your Name" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-accent-500" />
               <input type="tel" placeholder="Mobile Number" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-accent-500" />
-              <button type="submit" className="w-full rounded-lg bg-primary-800 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700">
+              <button type="submit" className="w-full rounded-lg bg-accent-500 py-2 text-sm font-semibold text-primary-900 transition-colors hover:bg-accent-400">
                 Schedule Now
               </button>
             </form>

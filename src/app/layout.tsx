@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HomeWrite Publishers — Premium Handwriting Projects 2026",
+  title: "Vishv Book Publishers — Premium Handwriting Projects 2026",
   description:
     "Turn your handwriting into wealth. The most trusted handwriting ecosystem in India with guaranteed payouts, 50% advance on dispatch, and premium kits.",
 };
