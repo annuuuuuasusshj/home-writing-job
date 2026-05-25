@@ -5,6 +5,7 @@ export interface PlanConfig {
   fee: string;
   advance: string;
   pages: number;
+  duration?: string;
   popular?: boolean;
 }
 
@@ -53,9 +54,9 @@ export const DEFAULT_CONFIG: SiteConfig = {
   upiId: "",
   qrImageUrl: "",
   plans: [
-    { tier: "Starter", name: "Project A", reward: "18,000", fee: "450", advance: "9,000", pages: 40 },
-    { tier: "Professional", name: "Project B", reward: "35,000", fee: "900", advance: "17,500", pages: 90, popular: true },
-    { tier: "Premium", name: "Project C", reward: "50,000", fee: "1,500", advance: "25,000", pages: 130 },
+    { tier: "Starter", name: "Project 1", reward: "32,500", fee: "650", advance: "16,250", pages: 50, duration: "10 Days" },
+    { tier: "Professional", name: "Project 2", reward: "46,000", fee: "850", advance: "23,000", pages: 100, duration: "20 Days", popular: true },
+    { tier: "Premium", name: "Project 3", reward: "54,500", fee: "1,050", advance: "27,250", pages: 180, duration: "30 Days" },
   ],
   testimonials: [
     { name: "Suresh Yadav", city: "Lucknow", initial: "S", stars: 5, text: "Kit mila 2 din mein. Paper quality bahut acchi hai aur ₹11,000 advance bhi turant mil gaya. Bahut impressed hoon." },

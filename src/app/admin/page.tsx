@@ -229,6 +229,7 @@ export default function AdminPage() {
                     <Field label="Registration Fee (₹)" value={plan.fee} onChange={(v) => updatePlan(i, "fee", v)} />
                     <Field label="Advance Payout (₹)" value={plan.advance} onChange={(v) => updatePlan(i, "advance", v)} />
                     <Field label="Pages" value={String(plan.pages)} onChange={(v) => updatePlan(i, "pages", Number(v))} />
+                    <Field label="Duration" value={plan.duration || ""} onChange={(v) => updatePlan(i, "duration", v)} placeholder="e.g. 10 Days" />
                   </div>
                   <label className="mt-3 flex items-center gap-2 text-sm text-gray-300">
                     <input

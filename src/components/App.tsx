@@ -541,8 +541,14 @@ function ProjectsView({ plans, selectPlan }: { plans: PlanConfig[]; selectPlan: 
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-gray-500">⊙</span>
-                <span className="text-gray-400">Work: {plan.pages} Pages</span>
+                <span className="text-gray-400">Work: {plan.pages} Pages (Front &amp; Back)</span>
               </div>
+              {plan.duration && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-accent-500">⏱</span>
+                  <span className="text-gray-300">Duration: <strong className="text-white">{plan.duration}</strong></span>
+                </div>
+              )}
             </div>
             <button
               onClick={() => selectPlan(index)}
