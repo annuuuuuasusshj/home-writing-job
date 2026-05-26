@@ -30,7 +30,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    fetch("/api/config")
+    fetch("/api/config.php")
       .then((r) => (r.ok ? r.json() : DEFAULT_CONFIG))
       .then((d) => setCfg(d))
       .catch(() => {});

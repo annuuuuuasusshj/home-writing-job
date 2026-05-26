@@ -21,7 +21,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (didLoad.current) return;
     didLoad.current = true;
-    fetch("/api/config")
+    fetch("/api/config.php")
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => { if (data) setConfig(data); })
       .catch(() => {});
@@ -29,7 +29,7 @@ export default function AdminPage() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch("/api/config", {
+      const res = await fetch("/api/config.php", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-password": password },
         body: JSON.stringify(config),
@@ -50,7 +50,7 @@ export default function AdminPage() {
     setSaveMsg("");
     try {
       const body = { ...config, ...extra };
-      const res = await fetch("/api/config", {
+      const res = await fetch("/api/config.php", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-password": password },
         body: JSON.stringify(body),
